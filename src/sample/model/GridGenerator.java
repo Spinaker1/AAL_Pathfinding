@@ -20,7 +20,7 @@ public class GridGenerator {
         grid = new Grid(width, height);
         grid2 = new Grid(width, height);
         initGrid();
-        for (int i=1;i<=36;i++)
+        for (int i=1;i<=12;i++)
             generate();
         return grid;
     }

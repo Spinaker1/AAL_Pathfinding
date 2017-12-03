@@ -42,19 +42,6 @@ public class Grid implements Cloneable {
         return grid;
     }
 
-    public void show() {
-        for (int i=0;i<height;i++) {
-            for (int j=0;j<width;j++) {
-                if (tiles[j][i].getColor() ==  Color.BLACK)
-                    System.out.print("#");
-                else
-                    System.out.print(".");
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-
     public void writeFile() {
         try {
             PrintWriter printWriter = new PrintWriter("plik.txt");

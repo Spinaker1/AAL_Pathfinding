@@ -12,11 +12,13 @@ public class Board extends BorderPane {
     private final int width;
     private final int height;
     private HBox boardHBox;
+    private int sceneSize;
 
-    public Board(int width, int height) {
+    public Board(int width, int height, int sceneSize) {
         tiles = new Tile[width][height];
         this.height = height;
         this.width = width;
+        this.sceneSize = sceneSize;
 
         HBox hBox = setupEmptyTiles();
         setScale(hBox);
@@ -45,7 +47,7 @@ public class Board extends BorderPane {
     private void setScale(HBox hBox) {
         double x = height > width ? height : width;
         x = x * tiles[0][0].getMaxHeight();
-        x = (0.9*500)/x;
+        x = (0.9*sceneSize)/x;
         hBox.setScaleX(x);
         hBox.setScaleY(x);
     }

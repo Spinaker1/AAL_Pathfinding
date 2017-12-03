@@ -7,6 +7,8 @@ import sample.controller.Controller;
 
 public class View {
     private Controller controller;
+
+    private final int sceneSize = 700;
     private Scene scene;
     private Board board;
     private MainMenu mainMenu;
@@ -14,13 +16,13 @@ public class View {
     public View(Stage primaryStage) {
         primaryStage.setTitle("Hello World");
         mainMenu = new MainMenu(this);
-        scene = new Scene(mainMenu, 500, 500);
+        scene = new Scene(mainMenu, sceneSize, sceneSize);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     public void createBoard(int width, int height) {
-        board = new Board(width, height);
+        board = new Board(width, height, sceneSize);
         scene.setRoot(board);
     }
 

@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 
 public class MainMenu extends VBox {
     private View view;
+
     public MainMenu(View view) {
         super(20);
         this.view = view;
