@@ -4,10 +4,12 @@ import javafx.application.Platform;
 import sample.Color;
 import sample.Point;
 import sample.controller.Controller;
+import sample.model.algorithms.Algorithm;
 
 public class Model {
     private Grid grid;
     private Controller controller;
+    private Algorithm algorithm;
 
     public Model() {
 

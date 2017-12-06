@@ -2,6 +2,7 @@ package sample.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -9,6 +10,7 @@ import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import sample.Color;
 import sample.Point;
 import sample.model.Model;
 import sample.view.View;
@@ -27,8 +29,10 @@ public class Controller {
         model.generateGrid(width,height);
     }
 
-    public void setWhite(Point p) {
-        view.setWhite(p);
+    public void setWhite(Point p) { view.setWhite(p); }
+
+    public void setYellow(Point p) {
+        view.setYellow(p);
     }
 
     public void readFile(String fileName) {
@@ -66,4 +70,23 @@ public class Controller {
             alert.showAndWait();
         }
     }
+    /*
+    public void writeFile() {
+        try {
+            PrintWriter printWriter = new PrintWriter("plik.txt");
+            printWriter.println(width);
+            printWriter.println(height);
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    if (tiles[j][i].getColor() == Color.BLACK)
+                        printWriter.print("0");
+                    else
+                        printWriter.print("1");
+                }
+                printWriter.println();
+            }
+            printWriter.close();
+        } catch (FileNotFoundException e) {};
+    }
+    */
 }

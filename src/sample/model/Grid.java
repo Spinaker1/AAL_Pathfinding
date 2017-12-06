@@ -2,13 +2,10 @@ package sample.model;
 
 import sample.*;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 public class Grid implements Cloneable {
     private int width;
     private int height;
-    Tile tiles[][];
+    public Tile tiles[][];
 
     public Grid(int width, int height) {
         this.width=width;
@@ -40,23 +37,5 @@ public class Grid implements Cloneable {
             }
         }
         return grid;
-    }
-
-    public void writeFile() {
-        try {
-            PrintWriter printWriter = new PrintWriter("plik.txt");
-            printWriter.println(width);
-            printWriter.println(height);
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    if (tiles[j][i].getColor() == Color.BLACK)
-                        printWriter.print("0");
-                    else
-                        printWriter.print("1");
-                }
-                printWriter.println();
-            }
-            printWriter.close();
-        } catch (FileNotFoundException e) {};
     }
 }

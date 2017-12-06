@@ -1,75 +1,65 @@
 package sample.view;
 
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import sample.Point;
 
-public class Board extends BorderPane {
+public class Board extends HBox {
     private final Tile[][] tiles;
     private final int width;
     private final int height;
-    private HBox boardHBox;
-    private int sceneSize;
+    private double sceneHeight;
+    private short clicksCount = 0;
 
-    public Board(int width, int height, int sceneSize) {
+    public Board(int width, int height, double sceneHeight) {
         tiles = new Tile[width][height];
         this.height = height;
         this.width = width;
-        this.sceneSize = sceneSize;
+        this.sceneHeight = sceneHeight;
 
-        HBox hBox = setupEmptyTiles();
-        setScale(hBox);
+        setMinSize(1,1);
+
+        setupEmptyTiles();
+        setScale();
     }
 
-    private HBox setupEmptyTiles() {
-        boardHBox = new HBox();
-
+    private void setupEmptyTiles() {
         for (int i = 0; i < width; i++) {
             VBox vBox = new VBox();
             vBox.setAlignment(Pos.CENTER);
             for (int j = 0; j < height; j++) {
-                tiles[i][j] = new Tile(new Point(i,j));
+                tiles[i][j] = new Tile(new Point(i,j), this);
                 vBox.getChildren().add(tiles[i][j]);
             }
-            boardHBox.getChildren().add(vBox);
+           getChildren().add(vBox);
         }
-
-        boardHBox.setMinSize(1, 1);
-        setCenter(boardHBox);
-        boardHBox.setAlignment(Pos.CENTER);
-
-        return boardHBox;
     }
 
-    private void setScale(HBox hBox) {
+    private void setScale() {
         double x = height > width ? height : width;
         x = x * tiles[0][0].getMaxHeight();
-        x = (0.9*sceneSize)/x;
-        hBox.setScaleX(x);
-        hBox.setScaleY(x);
-    }
-
-    public void show() {
-        setVisible(true);
-    }
-
-    public void hide() {
-        setVisible(false);
-    }
-
-    public void disable() {
-        Platform.runLater(() -> boardHBox.setMouseTransparent(true));
-    }
-
-    public void enable() {
-        Platform.runLater(() -> boardHBox.setMouseTransparent(false));
+        x = (0.9* sceneHeight)/x;
+        setScaleX(x);
+        setScaleY(x);
     }
 
     public void setWhite(Point point) {
         tiles[point.getX()][point.getY()].setWhiteImage();
+    }
+
+    public void setYellow(Point point) {
+        tiles[point.getX()][point.getY()].setYellowImage();
+    }
+
+    public short getClicksCount() {
+        return clicksCount;
+    }
+
+    public void setClicksCount(short clicksCount) {
+        this.clicksCount = clicksCount;
     }
 }
 

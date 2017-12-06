@@ -6,9 +6,11 @@ import sample.Point;
 public class Tile extends Button {
     private final PawnSprite pawnSprite;
     private Point location;
+    private Board board;
 
-    public Tile(Point location) {
+    public Tile(Point location, Board board) {
         this.location = location;
+        this.board = board;
         pawnSprite = new PawnSprite();
 
         setMinSize(50, 50);
@@ -20,9 +22,8 @@ public class Tile extends Button {
         onClick();
     }
 
-    public void setBlackImage() {
-        setMouseTransparent(true);
-        pawnSprite.setBlack();
+    public void setYellowImage() {
+        pawnSprite.setYellow();
     }
 
     public void setWhiteImage() {
@@ -32,7 +33,18 @@ public class Tile extends Button {
 
     private void onClick() {
         setOnAction(e -> {
-            pawnSprite.setYellow();
+            setMouseTransparent(true);
+
+            short clicksCount = (short) (board.getClicksCount()+1);
+            switch(clicksCount) {
+                case 1: pawnSprite.setGreen();
+                        break;
+                case 2: pawnSprite.setRed();
+                        board.setMouseTransparent(true);
+                        clicksCount=0;
+                        break;
+            };
+            board.setClicksCount(clicksCount);
         });
     }
 }

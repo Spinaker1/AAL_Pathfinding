@@ -19,4 +19,8 @@ public class Tile {
     public Color getColor() {
         return color;
     }
+
+    public Point getLocation() {
+        return location;
+    }
 }
