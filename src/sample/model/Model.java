@@ -5,14 +5,22 @@ import sample.Color;
 import sample.Point;
 import sample.controller.Controller;
 import sample.model.algorithms.Algorithm;
+import sample.model.algorithms.SampleAlgorithm;
 
 public class Model {
     private Grid grid;
     private Controller controller;
-    private Algorithm algorithm;
+
+    private Point start;
+    private Point finish;
 
     public Model() {
 
+    }
+
+    public void findPath() {
+        Algorithm algorithm = new SampleAlgorithm(this);
+        algorithm.findPath(start,finish);
     }
 
     public void createBlankGrid(int width, int height) {
@@ -44,5 +52,17 @@ public class Model {
 
     public void setController(Controller controller) {
         this.controller = controller;
+    }
+
+    public Controller getController() {
+        return controller;
+    }
+
+    public void setStart(Point start) { this.start = start; }
+
+    public void setFinish(Point finish) { this.finish = finish; }
+
+    public Grid getGrid() {
+        return grid;
     }
 }

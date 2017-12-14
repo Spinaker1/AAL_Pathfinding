@@ -13,12 +13,14 @@ public class Board extends HBox {
     private final int height;
     private double sceneHeight;
     private short clicksCount = 0;
+    private View view;
 
-    public Board(int width, int height, double sceneHeight) {
+    public Board(int width, int height, double sceneHeight, View view) {
         tiles = new Tile[width][height];
         this.height = height;
         this.width = width;
         this.sceneHeight = sceneHeight;
+        this.view = view;
 
         setMinSize(1,1);
 
@@ -54,6 +56,10 @@ public class Board extends HBox {
         tiles[point.getX()][point.getY()].setYellowImage();
     }
 
+    public void setBlue(Point point) {
+        tiles[point.getX()][point.getY()].setBlueImage();
+    }
+
     public short getClicksCount() {
         return clicksCount;
     }
@@ -61,6 +67,8 @@ public class Board extends HBox {
     public void setClicksCount(short clicksCount) {
         this.clicksCount = clicksCount;
     }
+
+    public View getView() { return view; }
 }
 
 

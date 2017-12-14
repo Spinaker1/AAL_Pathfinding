@@ -19,10 +19,10 @@ public class MainMenu extends VBox {
         this.view = view;
         setPadding(new Insets(5));
         setAlignment(Pos.CENTER);
-        setupButtons();
+        setupInterface();
     }
 
-    private void setupButtons() {
+    private void setupInterface() {
         hBoxes = new HBox[3];
 
         for (int i=0; i<hBoxes.length; i++) {
@@ -79,5 +79,12 @@ public class MainMenu extends VBox {
         radioButtons[0].setSelected(true);
 
         getChildren().addAll(radioButtons);
+
+        Button findPathButton = new Button("Znajdź ścieżkę");
+        getChildren().add(findPathButton);
+
+        findPathButton.setOnAction(e -> {
+            view.getController().findPath();
+        });
     }
 }

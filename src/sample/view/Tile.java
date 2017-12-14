@@ -26,6 +26,10 @@ public class Tile extends Button {
         pawnSprite.setYellow();
     }
 
+    public void setBlueImage() {
+        pawnSprite.setBlue();
+    }
+
     public void setWhiteImage() {
         setMouseTransparent(false);
         pawnSprite.setWhite();
@@ -38,8 +42,10 @@ public class Tile extends Button {
             short clicksCount = (short) (board.getClicksCount()+1);
             switch(clicksCount) {
                 case 1: pawnSprite.setGreen();
+                        board.getView().getController().setStart(location);
                         break;
                 case 2: pawnSprite.setRed();
+                        board.getView().getController().setFinish(location);
                         board.setMouseTransparent(true);
                         clicksCount=0;
                         break;

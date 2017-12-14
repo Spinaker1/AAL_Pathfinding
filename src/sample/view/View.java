@@ -33,14 +33,16 @@ public class View {
     }
 
     public void createBoard(int width, int height) {
-        board = new Board(width, height, scene.getHeight());
+        board = new Board(width, height, scene.getHeight(),this);
         board.setAlignment(Pos.CENTER);
         pane.setCenter(board);
     }
 
-    public void setWhite(Point point) { board.setWhite(point);}
 
-    public void setYellow(Point point) { board.setYellow(point);}
+    public Board getBoard() {
+        return board;
+    }
+
 
     public Controller getController() {
         return controller;

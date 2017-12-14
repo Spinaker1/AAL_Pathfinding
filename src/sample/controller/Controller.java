@@ -29,11 +29,19 @@ public class Controller {
         model.generateGrid(width,height);
     }
 
-    public void setWhite(Point p) { view.setWhite(p); }
-
-    public void setYellow(Point p) {
-        view.setYellow(p);
+    public void findPath() {
+        model.findPath();
     }
+
+    public void setWhite(Point p) { view.getBoard().setWhite(p); }
+
+    public void setBlue(Point p) { view.getBoard().setBlue(p); }
+
+    public void setYellow(Point p) { view.getBoard().setYellow(p); }
+
+    public void setStart(Point start) { model.setStart(start); }
+
+    public void setFinish(Point finish) { model.setFinish(finish); }
 
     public void readFile(String fileName) {
         try {
@@ -56,7 +64,7 @@ public class Controller {
                     Point point = new Point(j,i);
                     model.setColor(point,x);
                     if (x==1)
-                        view.setWhite(point);
+                        view.getBoard().setWhite(point);
                 }
                 i++;
             }

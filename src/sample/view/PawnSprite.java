@@ -23,6 +23,8 @@ public class PawnSprite extends ImageView {
     public void setGreen() { setImage(imageManager.greenImage); }
 
     public void setRed() { setImage(imageManager.redImage); }
+
+    public void setBlue() { setImage(imageManager.blueImage); }
 }
 
 class ImageManager {
@@ -31,6 +33,7 @@ class ImageManager {
     public Image yellowImage;
     public Image greenImage;
     public Image redImage;
+    public Image blueImage;
 
     ImageManager() {
         whiteImage = new Image("file:src/images/white.png");
@@ -38,5 +41,6 @@ class ImageManager {
         yellowImage = new Image("file:src/images/yellow.png");
         greenImage = new Image("file:src/images/green.png");
         redImage = new Image("file:src/images/red.png");
+        blueImage = new Image("file:src/images/blue.png");
     }
 }
