@@ -10,9 +10,9 @@ import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import sample.Color;
 import sample.Point;
 import sample.model.Model;
+import sample.model.algorithms.Algorithm;
 import sample.view.View;
 
 public class Controller {
@@ -29,8 +29,8 @@ public class Controller {
         model.generateGrid(width,height);
     }
 
-    public void findPath() {
-        model.findPath();
+    public void findPath(int chosenAlgorithm) {
+        model.findPath(chosenAlgorithm);
     }
 
     public void setWhite(Point p) { view.getBoard().setWhite(p); }

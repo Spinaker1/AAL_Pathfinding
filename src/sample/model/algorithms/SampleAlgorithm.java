@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class SampleAlgorithm implements Algorithm {
-    private LinkedList<Vertex> vertList = new LinkedList<Vertex>();
     private Model model;
 
     public SampleAlgorithm(Model model) {
@@ -16,9 +15,10 @@ public class SampleAlgorithm implements Algorithm {
     }
 
     public void findPath(Point start, Point finish) {
-        vertList.push(new Vertex(finish, 0,null));
+        LinkedList<Vertex> vertList = new LinkedList<Vertex>();
+        vertList.push(new Vertex(start, 0,null));
 
-        Vertex startVert;
+        Vertex finishVert;
         LinkedList<Vertex> vertsToAdd = new LinkedList<Vertex>();
 
         main_loop:
@@ -48,9 +48,9 @@ public class SampleAlgorithm implements Algorithm {
                 }
                 vertList.push(vert1);
 
-                if (vert1.point.equals(start))
+                if (vert1.point.equals(finish))
                 {
-                    startVert = vert1;
+                    finishVert = vert1;
                     break main_loop;
                 }
             }
@@ -64,7 +64,7 @@ public class SampleAlgorithm implements Algorithm {
                 model.getController().setBlue(vert1.point);
         }
 
-        for (Vertex vertex = startVert.predecessor; vertex.predecessor != null; vertex=vertex.predecessor) {
+        for (Vertex vertex = finishVert.predecessor; vertex.predecessor != null; vertex=vertex.predecessor) {
             model.getController().setYellow(vertex.point);
         }
     }
@@ -78,6 +78,9 @@ public class SampleAlgorithm implements Algorithm {
             this.point = point;
             this.distance = distance;
             this.predecessor = predecessor;
+        }
+
+        Vertex() {
         }
     }
 }

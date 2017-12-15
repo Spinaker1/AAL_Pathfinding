@@ -4,7 +4,9 @@ import javafx.application.Platform;
 import sample.Color;
 import sample.Point;
 import sample.controller.Controller;
+import sample.model.algorithms.AStar;
 import sample.model.algorithms.Algorithm;
+import sample.model.algorithms.Dijkstra;
 import sample.model.algorithms.SampleAlgorithm;
 
 public class Model {
@@ -15,11 +17,22 @@ public class Model {
     private Point finish;
 
     public Model() {
-
     }
 
-    public void findPath() {
-        Algorithm algorithm = new SampleAlgorithm(this);
+    public void findPath(int chosenAlgorithm) {
+        Algorithm algorithm;
+        switch (chosenAlgorithm) {
+            case 0: algorithm = new AStar(this);
+                    break;
+            case 1: algorithm = new Dijkstra(this);
+                    break;
+            case 2: algorithm = new AStar(this);
+                    break;
+            case 3: algorithm = new SampleAlgorithm(this);
+                    break;
+            default:
+                    algorithm = new AStar(this);
+        }
         algorithm.findPath(start,finish);
     }
 

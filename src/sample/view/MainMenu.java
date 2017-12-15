@@ -84,7 +84,14 @@ public class MainMenu extends VBox {
         getChildren().add(findPathButton);
 
         findPathButton.setOnAction(e -> {
-            view.getController().findPath();
+            int chosenAlgorithm=0;
+            for (int i=0; i<radioButtons.length; i++) {
+                if (radioButtons[i].isSelected()) {
+                    chosenAlgorithm=i;
+                    break;
+                }
+            }
+            view.getController().findPath(chosenAlgorithm);
         });
     }
 }

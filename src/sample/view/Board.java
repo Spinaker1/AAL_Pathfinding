@@ -69,6 +69,12 @@ public class Board extends HBox {
     }
 
     public View getView() { return view; }
+
+    public void clear() {
+        getChildren().clear();
+        setupEmptyTiles();
+        setScale();
+    }
 }
 
 

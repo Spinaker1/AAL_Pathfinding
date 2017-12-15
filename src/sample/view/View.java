@@ -38,11 +38,9 @@ public class View {
         pane.setCenter(board);
     }
 
-
     public Board getBoard() {
         return board;
     }
-
 
     public Controller getController() {
         return controller;
