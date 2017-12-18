@@ -26,9 +26,7 @@ public class Model {
                     break;
             case 1: algorithm = new Dijkstra(this);
                     break;
-            case 2: algorithm = new AStar(this);
-                    break;
-            case 3: algorithm = new SampleAlgorithm(this);
+            case 2: algorithm = new SampleAlgorithm(this);
                     break;
             default:
                     algorithm = new AStar(this);
