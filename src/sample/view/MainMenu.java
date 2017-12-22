@@ -52,6 +52,11 @@ public class MainMenu extends VBox {
 
         createToggleGroup();
 
+        writeButton.setOnAction(e -> {
+            String fileName = textField2.getText();
+            view.getController().writeFile(fileName);
+        });
+
         readButton.setOnAction(e -> {
             String fileName = textField.getText();
             view.getController().readFile(fileName);
