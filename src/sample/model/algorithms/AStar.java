@@ -2,7 +2,7 @@ package sample.model.algorithms;
 
 import sample.Color;
 import sample.Point;
-import sample.model.Model;
+import sample.model.Grid;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -10,17 +10,12 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 public class AStar implements Algorithm {
-    private Model model;
     private Point finish;
 
-    public AStar(Model model) {
-        this.model = model;
-    }
-
     @Override
-    public void findPath(Point start, Point finish) {
+    public LinkedList<Point> findPath(Grid grid, Point start, Point finish, LinkedList<Point> usedPoints, boolean ignoreBlack) {
         this.finish = finish;
-        Vertex finishVert;
+        Vertex finishVert = null;
 
         Comparator<Vertex> comparator = new Comparator<Vertex>() {
             @Override
@@ -36,6 +31,10 @@ public class AStar implements Algorithm {
         openSet.add(new Vertex(start,0,null));
 
         for (;;) {
+            if (ignoreBlack == false && openSet.size() == 0) {
+                break;
+            }
+
             Vertex current = openSet.poll();
 
             if (current.point.equals(finish)) {
@@ -54,28 +53,24 @@ public class AStar implements Algorithm {
             for (Iterator<Vertex> iter = vertsToAdd.iterator(); iter.hasNext(); ) {
                 Vertex vert = (Vertex) iter.next();
 
-                if (vert.point.getX() < 0 || vert.point.getX() >= model.getGrid().getWidth())
+                if (vert.point.getX() < 0 || vert.point.getX() >= grid.getWidth())
                     continue;
-                if (vert.point.getY() < 0 || vert.point.getY() >= model.getGrid().getHeight())
+                if (vert.point.getY() < 0 || vert.point.getY() >= grid.getHeight())
                     continue;
-                if (model.getGrid().tiles[vert.point.getX()][vert.point.getY()].getColor() == Color.BLACK)
+                if (ignoreBlack == false && grid.tiles[vert.point.getX()][vert.point.getY()].getColor() == Color.BLACK)
                     continue;
 
-                for (Iterator<Vertex> iter1 = closeSet.iterator(); iter1.hasNext(); )
+                for (Vertex vert1: closeSet)
                 {
-                    Vertex vert1 = (Vertex) iter1.next();
                     if (vert1.point.equals(vert.point)) {
                         continue main_loop;
                     }
                 }
 
-                for (Iterator<Vertex> iter1 = openSet.iterator(); iter1.hasNext(); )
-                {
-                    Vertex vert1 = (Vertex) iter1.next();
+                for (Vertex vert1: openSet) {
                     if (vert1.point.equals(vert.point))
                         continue main_loop;
                 }
-
 
                 if (current.gDistance+1 >= vert.gDistance) {
                     openSet.add(vert);
@@ -91,15 +86,21 @@ public class AStar implements Algorithm {
             vertsToAdd.clear();
         }
 
-        for (Iterator<Vertex> iter = closeSet.iterator(); iter.hasNext(); ) {
-            Vertex vert1 = iter.next();
-            if (!vert1.point.equals(finish) && !vert1.point.equals(start))
-                model.getController().setBlue(vert1.point);
+        if (usedPoints != null) {
+            for (Vertex vert1 : closeSet) {
+                if (!vert1.point.equals(finish) && !vert1.point.equals(start))
+                    usedPoints.add(vert1.point);
+            }
         }
 
-        for (Vertex vertex = finishVert.predecessor; vertex.predecessor != null; vertex=vertex.predecessor) {
-            model.getController().setYellow(vertex.point);
+        LinkedList<Point> shortestPath = new LinkedList<Point>();
+        if (finishVert != null) {
+            for (Vertex vertex = finishVert.predecessor; vertex.predecessor != null; vertex = vertex.predecessor) {
+                shortestPath.add(vertex.point);
+            }
         }
+
+        return shortestPath;
     }
 
     protected int findHeuristic(Point p1, Point p2) {

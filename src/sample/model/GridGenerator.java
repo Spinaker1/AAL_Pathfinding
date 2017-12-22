@@ -1,7 +1,11 @@
 package sample.model;
 
 import sample.*;
+import sample.model.algorithms.AStar;
+import sample.model.algorithms.Algorithm;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class GridGenerator {
@@ -22,6 +26,41 @@ public class GridGenerator {
         initGrid();
         for (int i=1;i<=12;i++)
             generate();
+
+        Point firstWhiteTile = null;
+        LinkedList<Point> whiteTiles = new LinkedList<Point>();
+        for (int i=0; i<grid.getHeight() ; i++) {
+            for (int j=0; j<grid.getWidth(); j++) {
+                if (grid.tiles[j][i].getColor() == Color.WHITE) {
+                    if (firstWhiteTile == null) {
+                        firstWhiteTile = new Point(j,i);
+                    }
+                    else {
+                        whiteTiles.add(new Point(j,i));
+                    }
+                }
+            }
+        }
+
+        Algorithm algorithm = new AStar();
+        while (whiteTiles.size() != 0) {
+            Point tile = whiteTiles.pop();
+            LinkedList<Point> usedPoints = null;
+            LinkedList<Point> shortestPath = algorithm.findPath(grid,firstWhiteTile,tile,usedPoints,false);
+
+            if (usedPoints != null && usedPoints.size() != 0 ) {
+                for (Point tile1 : usedPoints) {
+                    whiteTiles.remove(tile1);
+                }
+            }
+
+            if (shortestPath.size() == 0) {
+                shortestPath = algorithm.findPath(grid,firstWhiteTile,tile,null,true);
+                for (Point tile1: shortestPath) {
+                    grid.tiles[tile1.getX()][tile1.getY()].setColor(Color.WHITE);
+                }
+            }
+        }
         return grid;
     }
 

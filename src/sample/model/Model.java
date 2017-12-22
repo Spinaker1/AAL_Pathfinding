@@ -1,6 +1,5 @@
 package sample.model;
 
-import javafx.application.Platform;
 import sample.Color;
 import sample.Point;
 import sample.controller.Controller;
@@ -9,29 +8,40 @@ import sample.model.algorithms.Algorithm;
 import sample.model.algorithms.Dijkstra;
 import sample.model.algorithms.SampleAlgorithm;
 
+import java.util.LinkedList;
+
 public class Model {
     private Grid grid;
     private Controller controller;
 
-    private Point start;
-    private Point finish;
+    private Point start = null;
+    private Point finish = null;
 
     public Model() {
     }
 
     public void findPath(int chosenAlgorithm) {
+        fillWhiteTiles();
         Algorithm algorithm;
         switch (chosenAlgorithm) {
-            case 0: algorithm = new AStar(this);
+            case 0: algorithm = new AStar();
                     break;
-            case 1: algorithm = new Dijkstra(this);
+            case 1: algorithm = new Dijkstra();
                     break;
-            case 2: algorithm = new SampleAlgorithm(this);
+            case 2: algorithm = new SampleAlgorithm();
                     break;
             default:
-                    algorithm = new AStar(this);
+                    algorithm = new AStar();
         }
-        algorithm.findPath(start,finish);
+
+        LinkedList<Point> usedPoints = new LinkedList<Point>();
+        LinkedList<Point> shortestPath = algorithm.findPath(grid, start, finish, usedPoints, false);
+        for (Point point: usedPoints) {
+            controller.setBlue(point);
+        }
+        for (Point point: shortestPath) {
+            controller.setYellow(point);
+        }
     }
 
     public void createBlankGrid(int width, int height) {
@@ -41,11 +51,16 @@ public class Model {
     public void generateGrid(int width, int height) {
         GridGenerator gridGenerator = new GridGenerator(width,height);
         grid = gridGenerator.generateGrid();
-        for (int i=0; i<height ; i++) {
-            for (int j=0; j<width; j++) {
+        fillWhiteTiles();
+    }
+
+    private void fillWhiteTiles () {
+        for (int i=0; i<grid.getHeight() ; i++) {
+            for (int j=0; j<grid.getWidth(); j++) {
                 if (grid.tiles[j][i].getColor() == Color.WHITE) {
                     final Point p = new Point(j, i);
-                    Platform.runLater(() -> controller.setWhite(p));
+                    if ((start == null || finish == null) || (!p.equals(start) && !p.equals(finish)))
+                        controller.setWhite(p);
                 }
             }
         }

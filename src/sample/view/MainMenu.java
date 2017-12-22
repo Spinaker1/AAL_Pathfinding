@@ -69,7 +69,7 @@ public class MainMenu extends VBox {
     private void createToggleGroup() {
         ToggleGroup group = new ToggleGroup();
         RadioButton radioButtons[] = new RadioButton[3];
-        String names[] = {"A*", "Dijkstra", "Brutalny"};
+        String names[] = {"A*", "Dijkstra", "Przeszukiwanie wszerz"};
 
         for (int i=0; i<radioButtons.length; i++) {
             radioButtons[i] = new RadioButton(names[i]);

@@ -2,19 +2,13 @@ package sample.model.algorithms;
 
 import sample.Color;
 import sample.Point;
-import sample.model.Model;
+import sample.model.Grid;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 public class SampleAlgorithm implements Algorithm {
-    private Model model;
 
-    public SampleAlgorithm(Model model) {
-        this.model = model;
-    }
-
-    public void findPath(Point start, Point finish) {
+    public LinkedList<Point> findPath(Grid grid, Point start, Point finish, LinkedList<Point> usedPoints, boolean ignoreBlack) {
         LinkedList<Vertex> vertList = new LinkedList<Vertex>();
         vertList.push(new Vertex(start, 0,null));
 
@@ -23,8 +17,7 @@ public class SampleAlgorithm implements Algorithm {
 
         main_loop:
         for (;;) {
-            for (Iterator<Vertex> iter = vertList.iterator(); iter.hasNext(); ) {
-                Vertex vert = (Vertex) iter.next();
+            for (Vertex vert: vertList ) {
                 vertsToAdd.push(new Vertex(new Point(vert.point.getX(), vert.point.getY() + 1), vert.distance + 1, vert));
                 vertsToAdd.push(new Vertex(new Point(vert.point.getX(), vert.point.getY() - 1), vert.distance + 1, vert));
                 vertsToAdd.push(new Vertex(new Point(vert.point.getX() + 1, vert.point.getY()), vert.distance + 1, vert));
@@ -32,17 +25,15 @@ public class SampleAlgorithm implements Algorithm {
             }
 
             small_loop:
-            for (Iterator<Vertex> iter = vertsToAdd.iterator(); iter.hasNext(); ) {
-                Vertex vert1 = (Vertex) iter.next();
-                if (vert1.point.getX() < 0 || vert1.point.getX() >= model.getGrid().getWidth())
+            for (Vertex vert1: vertsToAdd ) {
+                if (vert1.point.getX() < 0 || vert1.point.getX() >= grid.getWidth())
                     continue;
-                if (vert1.point.getY() < 0 || vert1.point.getY() >= model.getGrid().getHeight())
+                if (vert1.point.getY() < 0 || vert1.point.getY() >= grid.getHeight())
                     continue;
-                if (model.getGrid().tiles[vert1.point.getX()][vert1.point.getY()].getColor() == Color.BLACK)
+                if (grid.tiles[vert1.point.getX()][vert1.point.getY()].getColor() == Color.BLACK)
                     continue;
-                for (Iterator<Vertex> iter1 = vertList.iterator(); iter1.hasNext(); )
+                for (Vertex vert2: vertList)
                 {
-                    Vertex vert2 = (Vertex) iter1.next();
                     if (vert1.point.equals(vert2.point) && vert1.distance >= vert2.distance)
                         continue small_loop;
                 }
@@ -58,15 +49,19 @@ public class SampleAlgorithm implements Algorithm {
             vertsToAdd.clear();
         }
 
-        for (Iterator<Vertex> iter = vertList.iterator(); iter.hasNext(); ) {
-            Vertex vert1 = iter.next();
-            if (!vert1.point.equals(finish) && !vert1.point.equals(start))
-                model.getController().setBlue(vert1.point);
+        if (usedPoints != null) {
+            for (Vertex vert1 : vertList) {
+                if (!vert1.point.equals(finish) && !vert1.point.equals(start))
+                    usedPoints.add(vert1.point);
+            }
         }
 
+        LinkedList<Point> shortestPath = new LinkedList<Point>();
         for (Vertex vertex = finishVert.predecessor; vertex.predecessor != null; vertex=vertex.predecessor) {
-            model.getController().setYellow(vertex.point);
+            shortestPath.add(vertex.point);
         }
+
+        return shortestPath;
     }
 
     private class Vertex {
