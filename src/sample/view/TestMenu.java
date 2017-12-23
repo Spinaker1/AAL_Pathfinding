@@ -50,7 +50,7 @@ public class TestMenu extends VBox {
         Text text3 = new Text("Zapisz logi do pliku:");
         TextField textField2 = new TextField();
         textField2.setMaxWidth(100);
-        hBoxes[2].getChildren().addAll(text3,textField2);
+        hBoxes[3].getChildren().addAll(text3,textField2);
 
         Button testButton = new Button("Rozpocznij testy");
         hBoxes[4].getChildren().addAll(testButton);
