@@ -23,7 +23,7 @@ public class TestMenu extends VBox {
     }
 
     private void setupInterface() {
-        hBoxes = new HBox[4];
+        hBoxes = new HBox[5];
 
         for (int i = 0; i < hBoxes.length; i++) {
             hBoxes[i] = new HBox(5);
@@ -47,7 +47,22 @@ public class TestMenu extends VBox {
         heightTextField.setMaxWidth(50);
         hBoxes[2].getChildren().addAll(text2, widthTextField, heightTextField);
 
+        Text text3 = new Text("Zapisz logi do pliku:");
+        TextField textField2 = new TextField();
+        textField2.setMaxWidth(100);
+        hBoxes[2].getChildren().addAll(text3,textField2);
+
         Button testButton = new Button("Rozpocznij testy");
-        hBoxes[3].getChildren().addAll(testButton);
+        hBoxes[4].getChildren().addAll(testButton);
+
+        testButton.setOnAction(e -> {
+            int generatedGrids = Integer.parseInt(textField.getText());
+            int testsPerGrid = Integer.parseInt(textField1.getText());
+            int width = Integer.parseInt(widthTextField.getText());
+            int height = Integer.parseInt(heightTextField.getText());
+            String filename = textField2.getText();
+
+            view.getController().conductTests(filename,generatedGrids,testsPerGrid,width,height);
+        });
     }
 }

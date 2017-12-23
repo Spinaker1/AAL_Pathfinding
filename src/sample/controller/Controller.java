@@ -3,7 +3,9 @@ package sample.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Scanner;
 
 import javafx.application.Application;
@@ -29,17 +31,20 @@ public class Controller {
     public void generateGrid(int width, int height) {
         view.createBoard(width,height);
         model.generateGrid(width,height);
+        fillWhiteTiles();
     }
 
     public void findPath(int chosenAlgorithm) {
-        model.findPath(chosenAlgorithm);
+        fillWhiteTiles();
+        LinkedList<Point> usedPoints = new LinkedList<Point>();
+        LinkedList<Point> shortestPath = model.findPath(chosenAlgorithm,usedPoints);
+        for (Point point: usedPoints) {
+            view.getBoard().setBlue(point);
+        }
+        for (Point point: shortestPath) {
+            view.getBoard().setYellow(point);
+        }
     }
-
-    public void setWhite(Point p) { view.getBoard().setWhite(p); }
-
-    public void setBlue(Point p) { view.getBoard().setBlue(p); }
-
-    public void setYellow(Point p) { view.getBoard().setYellow(p); }
 
     public void setStart(Point start) { model.setStart(start); }
 
@@ -98,5 +103,60 @@ public class Controller {
             }
             printWriter.close();
         } catch (FileNotFoundException e) {};
+    }
+
+    public void conductTests(String filename, int generatedGrids, int testsPerGrid, int width, int height) {
+        try {
+            PrintWriter printWriter = new PrintWriter(filename);
+            Random rand = new Random();
+            String names[] = {"A*", "Dijkstra", "Przeszukiwanie wszerz"};
+            LinkedList<Point> usedTiles = new LinkedList<Point>();
+
+            for (int i = 1; i <= generatedGrids; i++) {
+                model.generateGrid(width, height);
+                LinkedList<Point> whiteTiles = model.getWhiteTiles();
+
+                printWriter.println();
+                printWriter.println("Wygenerowano raster nr " + i + ", rozmiar: " + width + "x" + height);
+
+                for (int j = 1; j <= testsPerGrid; j++) {
+                    model.setStart(whiteTiles.get(rand.nextInt(whiteTiles.size())));
+                    model.setFinish(whiteTiles.get(rand.nextInt(whiteTiles.size())));
+
+                    printWriter.println("Raster " + i + ", test " + j);
+
+                    for (int k = 0; k < 3; k++) {
+                        long sum = 0;
+                        for (int l = 0; l < 10; l++) {
+                            usedTiles.clear();
+                            long start = System.nanoTime();
+                            model.findPath(k, usedTiles);
+                            long stop = System.nanoTime();
+                            sum = sum + stop - start;
+                        }
+                        printWriter.println(names[k] + ": " + usedTiles.size() + ", " + ((double) sum) / 10000000);
+                    }
+                    printWriter.println();
+                }
+            }
+            printWriter.println("Koniec testów");
+            printWriter.close();
+        }
+        catch (FileNotFoundException e) {};
+
+        Alert alert = new Alert(AlertType.INFORMATION, "Koniec testów", ButtonType.OK);
+        alert.showAndWait();
+    }
+
+    private void fillWhiteTiles () {
+        Point start = model.getStart();
+        Point finish = model.getFinish();
+        LinkedList<Point> whiteTiles = model.getWhiteTiles();
+
+        for (Point tile: whiteTiles) {
+            if ((start == null || finish == null) || (!tile.equals(start) && !tile.equals(finish))) {
+                view.getBoard().setWhite(tile);
+            }
+        }
     }
 }

@@ -14,7 +14,6 @@ public class Main extends Application {
         Model model = new Model();
         Controller controller =  new Controller(view,model);
         view.setController(controller);
-        model.setController(controller);
     }
 
     public static void main(String[] args) {
