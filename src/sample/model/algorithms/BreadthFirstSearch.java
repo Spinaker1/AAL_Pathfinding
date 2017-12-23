@@ -6,7 +6,7 @@ import sample.model.Grid;
 
 import java.util.LinkedList;
 
-public class SampleAlgorithm implements Algorithm {
+public class BreadthFirstSearch implements Algorithm {
 
     public LinkedList<Point> findPath(Grid grid, Point start, Point finish, LinkedList<Point> usedPoints, boolean ignoreBlack) {
         LinkedList<Vertex> vertList = new LinkedList<Vertex>();

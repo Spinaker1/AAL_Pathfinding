@@ -6,7 +6,7 @@ import sample.controller.Controller;
 import sample.model.algorithms.AStar;
 import sample.model.algorithms.Algorithm;
 import sample.model.algorithms.Dijkstra;
-import sample.model.algorithms.SampleAlgorithm;
+import sample.model.algorithms.BreadthFirstSearch;
 
 import java.util.LinkedList;
 
@@ -28,7 +28,7 @@ public class Model {
                     break;
             case 1: algorithm = new Dijkstra();
                     break;
-            case 2: algorithm = new SampleAlgorithm();
+            case 2: algorithm = new BreadthFirstSearch();
                     break;
             default:
                     algorithm = new AStar();

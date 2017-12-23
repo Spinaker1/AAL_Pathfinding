@@ -88,7 +88,7 @@ public class MainMenu extends VBox {
         Button findPathButton = new Button("Znajdź ścieżkę");
         getChildren().add(findPathButton);
 
-        findPathButton.setOnAction(e -> {
+        findPathButton.setOnAction(e ->  {
             int chosenAlgorithm=0;
             for (int i=0; i<radioButtons.length; i++) {
                 if (radioButtons[i].isSelected()) {

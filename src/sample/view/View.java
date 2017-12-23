@@ -16,12 +16,15 @@ public class View {
     private Scene scene;
     private Board board;
     private MainMenu mainMenu;
+    private TestMenu testMenu;
     private BorderPane pane;
 
     public View(Stage primaryStage) {
         pane = new BorderPane();
         mainMenu = new MainMenu(this);
         pane.setRight(mainMenu);
+        testMenu = new TestMenu(this);
+        pane.setLeft(testMenu);
 
         scene = new Scene(pane);
 
