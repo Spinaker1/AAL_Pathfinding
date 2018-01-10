@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 public class MainMenu extends VBox {
     private View view;
     private HBox[] hBoxes;
+    private Text minPathLength = new Text("");
 
     public MainMenu(View view) {
         super(20);
@@ -23,18 +24,20 @@ public class MainMenu extends VBox {
     }
 
     private void setupInterface() {
-        hBoxes = new HBox[3];
+        hBoxes = new HBox[4];
 
         for (int i=0; i<hBoxes.length; i++) {
             hBoxes[i] = new HBox(5);
         }
         this.getChildren().addAll(hBoxes);
 
+        hBoxes[0].getChildren().add(minPathLength);
+
         Text text = new Text("Wczytaj raster z pliku:");
         Button readButton = new Button("Wczytaj");
         TextField textField = new TextField();
         textField.setMaxWidth(100);
-        hBoxes[0].getChildren().addAll(text,textField,readButton);
+        hBoxes[1].getChildren().addAll(text,textField,readButton);
 
         Text text2 = new Text("Wygeneruj raster:");
         Button generateButton = new Button("Stwórz");
@@ -42,13 +45,13 @@ public class MainMenu extends VBox {
         TextField heightTextField = new TextField();
         widthTextField.setMaxWidth(50);
         heightTextField.setMaxWidth(50);
-        hBoxes[1].getChildren().addAll(text2,widthTextField, heightTextField, generateButton);
+        hBoxes[2].getChildren().addAll(text2,widthTextField, heightTextField, generateButton);
 
         Text text3 = new Text("Zapisz raster do pliku:");
         Button writeButton = new Button("Zapisz");
         TextField textField2 = new TextField();
         textField2.setMaxWidth(100);
-        hBoxes[2].getChildren().addAll(text3,textField2,writeButton);
+        hBoxes[3].getChildren().addAll(text3,textField2,writeButton);
 
         createToggleGroup();
 
@@ -98,5 +101,9 @@ public class MainMenu extends VBox {
             }
             view.getController().findPath(chosenAlgorithm);
         });
+    }
+
+    public void setMinPathLength(int x) {
+        minPathLength.setText("Długość najkrótszej ścieżki: " + x);
     }
 }

@@ -30,12 +30,12 @@ public class TestMenu extends VBox {
         }
         this.getChildren().addAll(hBoxes);
 
-        Text text = new Text("Ilość wygenerowanych rastrów:");
+        Text text = new Text("Ilość testów:");
         TextField textField = new TextField();
         textField.setMaxWidth(50);
         hBoxes[0].getChildren().addAll(text, textField);
 
-        Text text1 = new Text("Ilość testów na raster:");
+        Text text1 = new Text("Powiększ długosć rastra o:");
         TextField textField1 = new TextField();
         textField1.setMaxWidth(50);
         hBoxes[1].getChildren().addAll(text1, textField1);
@@ -56,13 +56,13 @@ public class TestMenu extends VBox {
         hBoxes[4].getChildren().addAll(testButton);
 
         testButton.setOnAction(e -> {
-            int generatedGrids = Integer.parseInt(textField.getText());
-            int testsPerGrid = Integer.parseInt(textField1.getText());
+            int testsCount = Integer.parseInt(textField.getText());
+            int step = Integer.parseInt(textField1.getText());
             int width = Integer.parseInt(widthTextField.getText());
             int height = Integer.parseInt(heightTextField.getText());
             String filename = textField2.getText();
 
-            view.getController().conductTests(filename,generatedGrids,testsPerGrid,width,height);
+            view.getController().conductTests(filename,testsCount,step,width,height);
         });
     }
 }

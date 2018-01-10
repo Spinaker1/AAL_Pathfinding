@@ -52,4 +52,6 @@ public class View {
     public void setController(Controller controller) {
         this.controller = controller;
     }
+
+    public MainMenu getMainMenu() { return  mainMenu; }
 }
