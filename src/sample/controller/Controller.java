@@ -1,14 +1,5 @@
 package sample.controller;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Random;
-import java.util.Scanner;
-
-import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -16,8 +7,15 @@ import sample.Color;
 import sample.Point;
 import sample.model.Grid;
 import sample.model.Model;
-import sample.model.algorithms.Algorithm;
 import sample.view.View;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class Controller {
     private View view;
@@ -29,26 +27,30 @@ public class Controller {
     }
 
     public void generateGrid(int width, int height) {
-        view.createBoard(width,height);
-        model.generateGrid(width,height);
+        view.createBoard(width, height);
+        model.generateGrid(width, height);
         fillWhiteTiles();
     }
 
     public void findPath(int chosenAlgorithm) {
         fillWhiteTiles();
         LinkedList<Point> usedPoints = new LinkedList<Point>();
-        LinkedList<Point> shortestPath = model.findPath(chosenAlgorithm,usedPoints);
-        for (Point point: usedPoints) {
+        LinkedList<Point> shortestPath = model.findPath(chosenAlgorithm, usedPoints);
+        for (Point point : usedPoints) {
             view.getBoard().setBlue(point);
         }
-        for (Point point: shortestPath) {
+        for (Point point : shortestPath) {
             view.getBoard().setYellow(point);
         }
     }
 
-    public void setStart(Point start) { model.setStart(start); }
+    public void setStart(Point start) {
+        model.setStart(start);
+    }
 
-    public void setFinish(Point finish) { model.setFinish(finish); }
+    public void setFinish(Point finish) {
+        model.setFinish(finish);
+    }
 
     public void readFile(String fileName) {
         try {
@@ -57,31 +59,28 @@ public class Controller {
 
             int w = Integer.parseInt(scanner.nextLine());
             int h = Integer.parseInt(scanner.nextLine());
-            view.createBoard(w,h);
-            model.createBlankGrid(w,h);
+            view.createBoard(w, h);
+            model.createBlankGrid(w, h);
 
             String text = "";
-            int i=0;
+            int i = 0;
 
             while (scanner.hasNextLine()) {
                 text = scanner.nextLine();
-                for (int j=0; j<text.length(); j++)
-                {
-                    int x = Integer.parseInt(text.charAt(j)+"");
-                    Point point = new Point(j,i);
-                    model.setColor(point,x);
-                    if (x==1)
+                for (int j = 0; j < text.length(); j++) {
+                    int x = Integer.parseInt(text.charAt(j) + "");
+                    Point point = new Point(j, i);
+                    model.setColor(point, x);
+                    if (x == 1)
                         view.getBoard().setWhite(point);
                 }
                 i++;
             }
-        }
-        catch (FileNotFoundException e) {
-            Alert alert = new Alert(AlertType.WARNING, "Nie można otworzyć pliku "+fileName+"!", ButtonType.OK);
+        } catch (FileNotFoundException e) {
+            Alert alert = new Alert(AlertType.WARNING, "Nie można otworzyć pliku " + fileName + "!", ButtonType.OK);
             alert.showAndWait();
-        }
-        catch (NoSuchElementException e) {
-            Alert alert = new Alert(AlertType.WARNING, "Plik "+fileName+" jest pusty!", ButtonType.OK);
+        } catch (NoSuchElementException e) {
+            Alert alert = new Alert(AlertType.WARNING, "Plik " + fileName + " jest pusty!", ButtonType.OK);
             alert.showAndWait();
         }
     }
@@ -102,58 +101,54 @@ public class Controller {
                 printWriter.println();
             }
             printWriter.close();
-        } catch (FileNotFoundException e) {};
+        } catch (FileNotFoundException e) {
+        }
+        ;
     }
 
     public void conductTests(String filename, int generatedGrids, int testsPerGrid, int width, int height) {
         try {
-            PrintWriter printWriter = new PrintWriter(filename);
-            Random rand = new Random();
+            PrintWriter printWriter = new PrintWriter(new FileOutputStream(filename, true));
             String names[] = {"A*", "Dijkstra", "Przeszukiwanie wszerz"};
             LinkedList<Point> usedTiles = new LinkedList<Point>();
 
-            for (int i = 1; i <= generatedGrids; i++) {
-                model.generateGrid(width, height);
-                LinkedList<Point> whiteTiles = model.getWhiteTiles();
-
-                printWriter.println();
-                printWriter.println("Wygenerowano raster nr " + i + ", rozmiar: " + width + "x" + height);
-
-                for (int j = 1; j <= testsPerGrid; j++) {
-                    model.setStart(whiteTiles.get(rand.nextInt(whiteTiles.size())));
-                    model.setFinish(whiteTiles.get(rand.nextInt(whiteTiles.size())));
-
-                    printWriter.println("Raster " + i + ", test " + j);
-
-                    for (int k = 0; k < 3; k++) {
-                        long sum = 0;
-                        for (int l = 0; l < 10; l++) {
-                            usedTiles.clear();
-                            long start = System.nanoTime();
-                            model.findPath(k, usedTiles);
-                            long stop = System.nanoTime();
-                            sum = sum + stop - start;
-                        }
-                        printWriter.println(names[k] + ": " + usedTiles.size() + ", " + ((double) sum) / 10000000);
-                    }
-                    printWriter.println();
-                }
+            model.createBlankGrid(width, height);
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++)
+                    model.setColor(new Point(i, j), 1);
             }
-            printWriter.println("Koniec testów");
+
+            printWriter.print( width + ";" + height + ";");
+
+            model.setStart(new Point(0, 0));
+            model.setFinish(new Point(width - 1, height - 1));
+
+            for (int k = 0; k < 3; k++) {
+                long sum = 0;
+                for (int l = 0; l < 10; l++) {
+                    usedTiles.clear();
+                    long start = System.nanoTime();
+                    model.findPath(k, usedTiles);
+                    long stop = System.nanoTime();
+                    sum = sum + stop - start;
+                }
+                printWriter.print(usedTiles.size() + ";" + ((double) sum) / 10000000 + ";");
+            }
+            printWriter.println();
             printWriter.close();
+        } catch (FileNotFoundException e) {
         }
-        catch (FileNotFoundException e) {};
 
         Alert alert = new Alert(AlertType.INFORMATION, "Koniec testów", ButtonType.OK);
         alert.showAndWait();
     }
 
-    private void fillWhiteTiles () {
+    private void fillWhiteTiles() {
         Point start = model.getStart();
         Point finish = model.getFinish();
         LinkedList<Point> whiteTiles = model.getWhiteTiles();
 
-        for (Point tile: whiteTiles) {
+        for (Point tile : whiteTiles) {
             if ((start == null || finish == null) || (!tile.equals(start) && !tile.equals(finish))) {
                 view.getBoard().setWhite(tile);
             }

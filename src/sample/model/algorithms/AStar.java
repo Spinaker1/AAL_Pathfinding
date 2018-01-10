@@ -60,16 +60,12 @@ public class AStar implements Algorithm {
                 if (ignoreBlack == false && grid.tiles[vert.point.getX()][vert.point.getY()].getColor() == Color.BLACK)
                     continue;
 
-                for (Vertex vert1: closeSet)
-                {
-                    if (vert1.point.equals(vert.point)) {
-                        continue main_loop;
-                    }
+                if (closeSet.contains(vert)) {
+                    continue main_loop;
                 }
 
-                for (Vertex vert1: openSet) {
-                    if (vert1.point.equals(vert.point))
-                        continue main_loop;
+                if (openSet.contains(vert)) {
+                    continue main_loop;
                 }
 
                 if (current.gDistance+1 >= vert.gDistance) {
@@ -124,6 +120,11 @@ public class AStar implements Algorithm {
             this.predecessor = predecessor;
             this.gDistance = gDistance;
             this.fDistance = gDistance+findHeuristic(point,finish);
+        }
+
+        @Override
+        public boolean equals(Object other){
+            return this.point.equals(((Vertex)other).point);
         }
     }
 }
