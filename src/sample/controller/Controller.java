@@ -107,39 +107,34 @@ public class Controller {
         ;
     }
 
-    public void conductTests(String filename, int testsCount, int step, int width, int height) {
+    public void conductTests(String filename, int width, int height) {
         try {
             PrintWriter printWriter = new PrintWriter(new FileOutputStream(filename, true));
             LinkedList<Point> usedTiles = new LinkedList<Point>();
 
-            for (int t = 1; t <= testsCount; t++) {
-                model.createBlankGrid(width, height);
-                for (int i = 0; i < width; i++) {
-                    for (int j = 0; j < height; j++)
-                        model.setColor(new Point(i, j), 1);
-                }
-
-                printWriter.print(width + ";" + height + ";");
-
-                model.setStart(new Point(0, 0));
-                model.setFinish(new Point(width - 1, height - 1));
-
-                for (int k = 0; k < 3; k++) {
-                    long sum = 0;
-                    for (int l = 0; l < 10; l++) {
-                        usedTiles.clear();
-                        long start = System.nanoTime();
-                        model.findPath(k, usedTiles);
-                        long stop = System.nanoTime();
-                        sum = sum + stop - start;
-                    }
-                    printWriter.print(usedTiles.size() + ";" + ((double) sum) / 10000000 + ";");
-                }
-
-                printWriter.println();
-
-                width += step;
+            model.createBlankGrid(width, height);
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++)
+                    model.setColor(new Point(i, j), 1);
             }
+
+            printWriter.print(width + ";" + height + ";");
+
+            model.setStart(new Point(0, 0));
+            model.setFinish(new Point(width - 1, height - 1));
+
+            for (int k = 0; k < 3; k++) {
+                for (int l = 0; l < 10; l++) {
+                    usedTiles.clear();
+                    model.findPath(k, usedTiles);
+                }
+                long start = System.nanoTime();
+                model.findPath(k, usedTiles);
+                long stop = System.nanoTime();
+                printWriter.print(usedTiles.size() + ";" + ((double)(stop-start) / 1000000) + ";");
+            }
+
+            printWriter.println();
 
             printWriter.close();
         } catch (FileNotFoundException e) {
